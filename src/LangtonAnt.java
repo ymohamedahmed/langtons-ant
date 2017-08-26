@@ -33,31 +33,36 @@ public class LangtonAnt {
     }
 
     public void setupFrame() {
+	// Create a fullscreen frame
 	JFrame frame = new JFrame();
 	frame.setSize(width, height);
 	frame.setUndecorated(true);
 	frame.setResizable(false);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// Ask user for size of square
 	System.out.println("Input size of square");
 	Scanner scan = new Scanner(System.in);
 	int cellSize = scan.nextInt();
 	scan.close();
+	// Setup pane
 	Pane pane = new Pane(cellSize);
 	pane.genCells();
 	frame.add(pane);
+	// Display the frame
 	frame.setVisible(true);
     }
 
     public class Pane extends JPanel {
+	// Default square size (pixels)
 	private int squareSize = 10;
 	ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
 	Ant ant;
-	
 
 	public Pane(int squareSize) {
 	    this.squareSize = squareSize;
 	}
 
+	// Return an arraylist with the cells in the entire frame
 	public ArrayList<ArrayList<Cell>> genCells() {
 	    for (int xPos = 0; xPos <= width - squareSize; xPos += squareSize) {
 		ArrayList<Cell> temp = new ArrayList<Cell>();
@@ -71,8 +76,10 @@ public class LangtonAnt {
 		cells.add(temp);
 	    }
 	    ant = new Ant();
+	    // Start the ant in the middle of the grid
 	    ant.row = cells.size() / 2;
 	    ant.column = cells.get(0).size() / 2;
+	    // Starts facing north
 	    ant.dir = Direction.NORTH;
 	    return cells;
 
@@ -81,9 +88,9 @@ public class LangtonAnt {
 	@Override
 	public void paint(Graphics g) {
 	    super.paintComponent(g);
-
 	    Graphics2D g2d = (Graphics2D) g.create();
 
+	    // Paint each rectangle with a black outline
 	    for (ArrayList<Cell> cell : cells) {
 		for (Cell c : cell) {
 		    g2d.setColor(c.color);
@@ -92,22 +99,24 @@ public class LangtonAnt {
 		    g2d.draw(c.rect);
 		}
 	    }
+	    // Fill the rectangle red with the ant in
 	    g2d.setColor(Color.RED);
 	    g2d.fill(cells.get(ant.row).get(ant.column).rect);
 	    g2d.setColor(Color.BLACK);
 	    g2d.draw(cells.get(ant.row).get(ant.column).rect);
-
 	    moveAnt(ant, cells);
 	    repaint();
 	}
 
 	public void moveAnt(Ant ant, ArrayList<ArrayList<Cell>> cells) {
+	    // Rotate right at a white square and invert colour
 	    if (cells.get(ant.row).get(ant.column).color == Color.WHITE) {
 		cells.get(ant.row).get(ant.column).color = Color.BLACK;
 		rotateAnt(ant, true);
 		moveForward(ant, cells);
-
-	    } else if (cells.get(ant.row).get(ant.column).color == Color.BLACK) {
+	    }
+	    // Rotate left at a black square and invert colour
+	    else if (cells.get(ant.row).get(ant.column).color == Color.BLACK) {
 		cells.get(ant.row).get(ant.column).color = Color.WHITE;
 		rotateAnt(ant, false);
 		moveForward(ant, cells);
@@ -117,6 +126,7 @@ public class LangtonAnt {
 	}
 
 	public void rotateAnt(Ant ant, boolean right) {
+	    // Rotate ant appropriately
 	    if (right) {
 		switch (ant.dir) {
 		case NORTH:
@@ -149,7 +159,7 @@ public class LangtonAnt {
 		}
 	    }
 	}
-
+	// Test if the ant has moved off the grid and if so wrap it back round
 	public void checkOffGrid(Ant ant, ArrayList<ArrayList<Cell>> cells) {
 	    if (ant.row > cells.size() - 1) {
 		ant.row = 0;
@@ -162,7 +172,7 @@ public class LangtonAnt {
 		ant.column = cells.get(0).size() - 1;
 	    }
 	}
-
+	// Move ant based on direction and then check if off grid
 	public void moveForward(Ant ant, ArrayList<ArrayList<Cell>> cells) {
 	    switch (ant.dir) {
 	    case NORTH:
