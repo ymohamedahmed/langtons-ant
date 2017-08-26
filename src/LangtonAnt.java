@@ -10,8 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class LangtonAnt {
-    private int width = 0;
-    private int height = 0;
+    private int width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+    private int height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();;
 
     public class Ant {
 	int row;
@@ -33,8 +33,6 @@ public class LangtonAnt {
     }
 
     public void setupFrame() {
-	width = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
-	height = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	JFrame frame = new JFrame();
 	frame.setSize(width, height);
 	frame.setUndecorated(true);
@@ -44,7 +42,7 @@ public class LangtonAnt {
 	Scanner scan = new Scanner(System.in);
 	int cellSize = scan.nextInt();
 	scan.close();
-	Pane pane = new Pane(cellSize, width, height);
+	Pane pane = new Pane(cellSize);
 	pane.genCells();
 	frame.add(pane);
 	frame.setVisible(true);
@@ -54,13 +52,10 @@ public class LangtonAnt {
 	private int squareSize = 10;
 	ArrayList<ArrayList<Cell>> cells = new ArrayList<ArrayList<Cell>>();
 	Ant ant;
-	int width = 0;
-	int height = 0;
+	
 
-	public Pane(int squareSize, int width, int height) {
+	public Pane(int squareSize) {
 	    this.squareSize = squareSize;
-	    this.width = width;
-	    this.height = height;
 	}
 
 	public ArrayList<ArrayList<Cell>> genCells() {
