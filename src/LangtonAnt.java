@@ -166,7 +166,6 @@ public class LangtonAnt {
 	    } else if (ant.row < 0) {
 		ant.row = cells.size() - 1;
 	    } else if (ant.column > cells.get(0).size() - 1) {
-		System.out.println("CELLS SIZE: " + cells.get(0).size());
 		ant.column = 0;
 	    } else if (ant.column < 0) {
 		ant.column = cells.get(0).size() - 1;
